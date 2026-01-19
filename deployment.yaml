@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: web-term-tools
-          image: mdimitri/web-term-tools
+          image: ghcr.io/DimitriM/web-term-tools:latest
 ---
 apiVersion: v1
 kind: Service
