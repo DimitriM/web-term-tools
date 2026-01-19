@@ -6,7 +6,8 @@ on:
       - development
       - main
     tags:
-      - release-*
+      - "v*.*"
+      - "v*.*.*"
 
 env:
   REGISTRY: ghcr.io
