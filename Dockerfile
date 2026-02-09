@@ -40,10 +40,14 @@ RUN apk add --no-cache \
     pigz \
     bzip2 \
     pixz \
+    python3 \
+    py3-pip \
     zstd \
     mariadb-client \
     postgresql-client \
     redis
+
+RUN pip3 install neo4j
 
 # Configure a nice terminal
 RUN echo "export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> /etc/profile
