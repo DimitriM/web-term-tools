@@ -31,6 +31,7 @@ RUN apk add --no-cache \
     rsync \
     sed \
     socat \
+    samba-client \
     traceroute \
     util-linux \
     wget \
