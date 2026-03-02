@@ -57,6 +57,8 @@ RUN echo "alias poweroff='kill 1'" >> /etc/profile
 
 ENV TINI_KILL_PROCESS_GROUP=1
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 7681
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD [ "ttyd", "-W", "-s", "3", "-t", "titleFixed=/bin/sh", "-t", "rendererType=webgl", "-t", "disableLeaveAlert=true", "/bin/sh", "-i", "-l" ]
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
