@@ -57,8 +57,27 @@ RUN echo "alias poweroff='kill 1'" >> /etc/profile
 
 ENV TINI_KILL_PROCESS_GROUP=1
 
+# Fixed uid/gid so k8s securityContext.runAsUser/runAsGroup can pin an identity
+# that matches a real user/home dir in the image.
+ARG APP_UID=1000
+ARG APP_GID=1000
+RUN addgroup -g "${APP_GID}" webterm \
+    && adduser -D -u "${APP_UID}" -G webterm -s /bin/sh webterm
+
+# ping/arping/traceroute/nmap need raw sockets; grant it via file capabilities
+# since the container no longer runs as root by default. Note this has no
+# effect if the pod's securityContext sets allowPrivilegeEscalation: false
+# (e.g. the "restricted" Pod Security Standard) -- those raw-socket tools
+# simply won't work there, and no image-side change can fix that.
+RUN apk add --no-cache libcap \
+    && setcap cap_net_raw+ep /bin/ping \
+    && setcap cap_net_raw+ep /usr/sbin/arping \
+    && setcap cap_net_raw+ep /usr/bin/traceroute \
+    && setcap cap_net_raw+ep /usr/bin/nmap
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 7681
+USER webterm:webterm
 ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
