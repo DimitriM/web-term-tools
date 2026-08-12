@@ -48,7 +48,7 @@ RUN apk add --no-cache \
     postgresql-client \
     redis
 
-RUN pip3 install --break-system-packages neo4j
+RUN pip3 install --break-system-packages requests redis neo4j elasticsearch==8.19.1 minio pandas
 
 # Configure a nice terminal
 RUN echo "export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> /etc/profile
